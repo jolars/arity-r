@@ -1,0 +1,32 @@
+# Nix
+result
+result-*
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+.direnv/
+
+# R
+.Rhistory
+.Rapp.history
+.RData
+.RDataTmp
+.Ruserdata
+*-Ex.R
+/*.tar.gz
+/*.Rcheck/
+.Rproj.user/
+docs/
+*.utf8.md
+*.knit.md
+.Renviron
+
+# Native build artifacts
+src/.cargo/
+src/Makevars
+src/Makevars.win
+src/rust/target/
+src/rust/vendor/
+
+# Tooling
+.pre-commit-config.yaml

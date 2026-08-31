@@ -1,0 +1,23 @@
+[package]
+name = "arity-r"
+publish = false
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.89.0"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+name = "arity"
+
+[[bin]]
+name = "document"
+path = "document.rs"
+bench = false
+
+[dependencies]
+arity-formatter = "0.7.0"
+extendr-api = "0.9"
+
+[profile.release]
+lto = true
+codegen-units = 1

@@ -1,0 +1,28 @@
+Package: arity
+Title: Format R Code with Arity
+Version: 0.1.0
+Authors@R:
+    person(
+      "Johan",
+      "Larsson",
+      email = "johan@jolars.co",
+      role = c("aut", "cre", "cph"),
+      comment = c(ORCID = "0000-0002-4029-5945")
+    )
+Description: Provides R bindings to the deterministic, rule-based formatter from
+    'arity'. Format R source text or individual files using a style based on the
+    tidyverse R style guide.
+License: MIT + file LICENSE
+URL: https://github.com/jolars/arity-r, https://arity.cc
+BugReports: https://github.com/jolars/arity-r/issues
+Depends:
+    R (>= 4.2)
+Suggests:
+    testthat (>= 3.0.0)
+Config/rextendr/version: 0.5.0
+Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.89.0

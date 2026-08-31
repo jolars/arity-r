@@ -1,0 +1,4 @@
+* text=auto
+configure text eol=lf
+configure.win text eol=lf
+*.sh text eol=lf
