@@ -15,8 +15,8 @@ path = "document.rs"
 bench = false
 
 [dependencies]
-arity-formatter = "0.7.0"
-extendr-api = "0.9"
+arity-formatter = "=0.7.0"
+extendr-api = { version = "0.9", features = ["result_condition"] }
 
 [profile.release]
 lto = true

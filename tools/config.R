@@ -10,7 +10,11 @@ if (is_debug) {
   message("Building for CRAN.")
 }
 
-.cran_flags <- if (!is_not_cran && vendor_exists) "-j 2 --offline" else ""
+.cran_flags <- if (!is_not_cran && vendor_exists) {
+  "-j 2 --offline --frozen"
+} else {
+  ""
+}
 .profile <- if (is_debug) "" else "--release"
 .clean_target <- if (is_debug) "" else "$(TARGET_DIR)"
 

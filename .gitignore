@@ -25,6 +25,10 @@ docs/
 src/.cargo/
 src/Makevars
 src/Makevars.win
+src/*.o
+src/*.so
+src/*.dll
+src/symbols.rds
 src/rust/target/
 src/rust/vendor/
 

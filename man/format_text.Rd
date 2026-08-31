@@ -24,7 +24,8 @@ format_file(
 )
 }
 \arguments{
-\item{text}{A non-missing character scalar containing R source code.}
+\item{text}{A non-missing character scalar containing valid UTF-8 R source
+code. Strings with a declared encoding are converted to UTF-8.}
 
 \item{line_width}{Maximum output line width, from 1 through 1000.}
 

@@ -66,6 +66,16 @@ test_that("format_text validates its public arguments", {
   expect_error(format_text("x", verify = 1), "`verify`")
 })
 
+test_that("format_text accepts only valid UTF-8", {
+  invalid <- rawToChar(as.raw(c(0xff, 0xfe)))
+  expect_error(format_text(invalid), "valid UTF-8")
+
+  latin1 <- iconv("x <- \"caf\u00e9\"\n", from = "UTF-8", to = "latin1")
+  output <- format_text(latin1)
+  expect_true(validUTF8(output))
+  expect_identical(Encoding(output), "UTF-8")
+})
+
 test_that("format_file writes only changed files", {
   path <- tempfile(fileext = ".R")
   on.exit(unlink(path))

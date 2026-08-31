@@ -6,7 +6,8 @@
 #' `arity-formatter` Rust crate; they do not invoke the arity CLI or discover an
 #' `arity.toml` file.
 #'
-#' @param text A non-missing character scalar containing R source code.
+#' @param text A non-missing character scalar containing valid UTF-8 R source
+#'   code. Strings with a declared encoding are converted to UTF-8.
 #' @param path A non-missing character scalar naming a UTF-8 file. The contents
 #'   are treated as R source regardless of the file extension.
 #' @param line_width Maximum output line width, from 1 through 1000.
@@ -35,7 +36,7 @@ format_text <- function(
   roxygen_markdown = FALSE,
   verify = TRUE
 ) {
-  .assert_string(text, "text")
+  text <- .as_utf8_string(text, "text")
   options <- .format_options(
     line_width,
     indent_width,
@@ -44,13 +45,15 @@ format_text <- function(
     verify
   )
 
-  format_text_native(
-    text,
-    options$line_width,
-    options$indent_width,
-    options$line_ending,
-    options$roxygen_markdown,
-    options$verify
+  .unwrap_extendr_result(
+    format_text_native(
+      text,
+      options$line_width,
+      options$indent_width,
+      options$line_ending,
+      options$roxygen_markdown,
+      options$verify
+    )
   )
 }
 
@@ -80,13 +83,15 @@ format_file <- function(
     verify
   )
 
-  changed <- format_file_native(
-    path,
-    options$line_width,
-    options$indent_width,
-    options$line_ending,
-    options$roxygen_markdown,
-    options$verify
+  changed <- .unwrap_extendr_result(
+    format_file_native(
+      path,
+      options$line_width,
+      options$indent_width,
+      options$line_ending,
+      options$roxygen_markdown,
+      options$verify
+    )
   )
   invisible(changed)
 }
@@ -117,6 +122,26 @@ format_file <- function(
     )
   }
   invisible(value)
+}
+
+.as_utf8_string <- function(value, argument) {
+  .assert_string(value, argument)
+  if (identical(Encoding(value), "bytes")) {
+    stop("`", argument, "` must contain valid UTF-8.", call. = FALSE)
+  }
+
+  value <- enc2utf8(value)
+  if (!validUTF8(value)) {
+    stop("`", argument, "` must contain valid UTF-8.", call. = FALSE)
+  }
+  value
+}
+
+.unwrap_extendr_result <- function(value) {
+  if (inherits(value, "extendr_error")) {
+    stop(as.character(value$value)[[1L]], call. = FALSE)
+  }
+  value
 }
 
 .assert_width <- function(value, argument) {

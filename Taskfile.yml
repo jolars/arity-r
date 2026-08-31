@@ -20,53 +20,54 @@ tasks:
     internal: true
     dir: src
     cmds:
-      - cargo run --bin document --manifest-path=rust/Cargo.toml --target-dir=rust/target
+      - cargo run --locked --bin document --manifest-path=rust/Cargo.toml --target-dir=rust/target
 
   vendor-pkgs:
     desc: Re-vendor Rust dependencies for offline package builds
     cmds:
-      - rm -rf src/.cargo src/vendor
-      - cargo update --manifest-path src/rust/Cargo.toml
-      - Rscript -e 'rextendr::vendor_crates(clean = FALSE)'
+      - rm -rf src/.cargo src/vendor src/rust/vendor src/rust/vendor.tar.xz
+      - cargo generate-lockfile --manifest-path src/rust/Cargo.toml
+      - cargo vendor --locked --manifest-path src/rust/Cargo.toml src/rust/vendor
       - >-
         find src/rust/vendor -type f -name AGENTS.md
         -execdir cp {{.TASKFILE_DIR}}/tools/vendor-agent-override.md
         AGENTS.override.md \;
       - tar -cJ --no-xattrs -f src/rust/vendor.tar.xz -C src/rust vendor
+      - rm -rf src/rust/vendor
 
   rust-fmt:
     desc: Check Rust formatting
+    dir: src/rust
     cmds:
-      - cargo fmt --manifest-path src/rust/Cargo.toml -- --check
+      - cargo fmt -- --check
 
   rust-test:
     desc: Run Rust unit tests
+    dir: src/rust
     cmds:
-      - cargo test --manifest-path src/rust/Cargo.toml
+      - cargo test --locked
 
   rust-clippy:
     desc: Run Rust lints
+    dir: src/rust
     cmds:
-      - cargo clippy --manifest-path src/rust/Cargo.toml --all-targets -- -D warnings
+      - cargo clippy --locked --all-targets -- -D warnings
 
   build:
     desc: Build package tarball without the manual
     deps: [document]
-    dir: ..
     cmds:
-      - R CMD build --no-manual {{.TASKFILE_DIR | base}}
+      - R CMD build --no-manual .
 
   build-cran:
     desc: Build CRAN-style package tarball
-    dir: ..
     cmds:
-      - R CMD build {{.TASKFILE_DIR | base}}
+      - R CMD build .
 
   install:
     desc: Install the package
-    dir: ..
     cmds:
-      - R CMD INSTALL --no-multiarch --with-keep.source {{.TASKFILE_DIR | base}}
+      - R CMD INSTALL --no-multiarch --with-keep.source .
 
   clean-install:
     desc: Install the package after cleaning native artifacts
@@ -74,9 +75,10 @@ tasks:
       - R CMD INSTALL --preclean --no-multiarch --with-keep.source .
 
   check:
-    desc: Run R CMD check via devtools
+    desc: Check the built R source package
+    deps: [build]
     cmds:
-      - Rscript -e 'devtools::check()'
+      - _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-manual arity_*.tar.gz
 
   test:
     desc: Run testthat tests
@@ -91,4 +93,6 @@ tasks:
   clean:
     desc: Remove native build artifacts and unpacked vendor state
     cmds:
-      - rm -rf src/*.o src/*.so src/rust/target src/.cargo src/vendor
+      - >-
+        rm -rf src/*.o src/*.so src/*.dll src/symbols.rds src/rust/target
+        src/rust/vendor src/.cargo src/vendor
