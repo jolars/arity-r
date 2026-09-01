@@ -11,12 +11,12 @@ Source:
 [`DESCRIPTION`](https://github.com/jolars/arity-r/blob/main/DESCRIPTION)
 
 Larsson J (2026). *arity: Format R Code with Arity*. R package version
-0.0.0.9000, <https://github.com/jolars/arity-r>.
+0.1.0, <https://github.com/jolars/arity-r>.
 
     @Manual{,
       title = {arity: Format R Code with Arity},
       author = {Johan Larsson},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.1.0},
       url = {https://github.com/jolars/arity-r},
     }
