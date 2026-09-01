@@ -30,7 +30,3 @@ Or format one file in place:
 ```r
 changed <- format_file("R/example.R")
 ```
-
-The MVP deliberately handles one R source buffer or file at a time. Directory
-discovery, `arity.toml`, linting, parsing APIs, and `DESCRIPTION` formatting
-remain the responsibility of the `arity` CLI.
