@@ -20,4 +20,5 @@
 ^docs$
 ^pkgdown$
 ^cran-comments\.md$
-^\.versionary\.jsonc$
+^versionary\.jsonc$
+^\.versionary-manifest\.json$
