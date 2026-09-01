@@ -10,8 +10,8 @@
 
 `arity` provides R bindings to the formatter behind
 [arity](https://arity.cc). The package embeds the published
-[`arity-formatter`](https://crates.io/crates/arity-formatter) Rust
-crate; it does not invoke the `arity` command-line interface.
+[`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it does
+not invoke the `arity` command-line interface.
 
 Format source held in memory:
 
@@ -28,7 +28,3 @@ Or format one file in place:
 ``` r
 changed <- format_file("R/example.R")
 ```
-
-The MVP deliberately handles one R source buffer or file at a time.
-Directory discovery, `arity.toml`, linting, parsing APIs, and
-`DESCRIPTION` formatting remain the responsibility of the `arity` CLI.
