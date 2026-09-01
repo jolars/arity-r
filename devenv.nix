@@ -26,6 +26,7 @@
             roxygen2
             testthat
             urlchecker
+            pkgdown
           ];
         }
       );

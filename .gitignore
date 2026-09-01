@@ -34,3 +34,4 @@ src/rust/vendor/
 
 # Tooling
 .pre-commit-config.yaml
+docs
