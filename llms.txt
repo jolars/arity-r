@@ -1,4 +1,4 @@
-# arity
+# Arity
 
 `arity` provides R bindings to the formatter behind
 [arity](https://arity.cc). The package embeds the published
