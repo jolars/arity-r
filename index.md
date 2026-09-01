@@ -2,8 +2,8 @@
 
 `arity` provides R bindings to the formatter behind
 [arity](https://arity.cc). The package embeds the published
-[`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it does
-not invoke the `arity` command-line interface.
+[`arity-formatter`](https://crates.io/crates/arity-formatter) Rust
+crate; it does not invoke the `arity` command-line interface.
 
 Format source held in memory:
 
