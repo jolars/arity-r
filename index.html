@@ -51,7 +51,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>arity</code> provides R bindings to the formatter behind <a href="https://arity.cc" class="external-link">arity</a>. The package embeds the published <a href="https://crates.io/crates/arity-formatter" class="external-link"><code>arity-formatter</code></a> Rust crate; it does not invoke the <code>arity</code> command-line interface.</p>
+<p><code>arity</code> provides R bindings to the formatter behind <a href="https://arity.cc" class="external-link">arity</a>. The package embeds the published <a href="https://docs.rs/arity-formatter" class="external-link"><code>arity-formatter</code></a> Rust crate; it does not invoke the <code>arity</code> command-line interface.</p>
 <p>Format source held in memory:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jolars/arity-r" class="external-link">arity</a></span><span class="op">)</span></span>
@@ -61,7 +61,6 @@
 <p>Or format one file in place:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">changed</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/format_text.html">format_file</a></span><span class="op">(</span><span class="st">"R/example.R"</span><span class="op">)</span></span></code></pre></div>
-<p>The MVP deliberately handles one R source buffer or file at a time. Directory discovery, <code>arity.toml</code>, linting, parsing APIs, and <code>DESCRIPTION</code> formatting remain the responsibility of the <code>arity</code> CLI.</p>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
