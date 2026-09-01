@@ -27,6 +27,7 @@
             testthat
             urlchecker
             pkgdown
+            spelling
           ];
         }
       );
