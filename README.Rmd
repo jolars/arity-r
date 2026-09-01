@@ -10,14 +10,16 @@ output: github_document
 [![R-CMD-check](https://github.com/jolars/arity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jolars/arity-r/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-`arity` provides R bindings to the formatter behind
-[arity](https://arity.cc). The package embeds the published
+`arity` provides R bindings to the formatter behind [arity](https://arity.cc).
+The package embeds the published
 [`arity-formatter`](https://crates.io/crates/arity-formatter) Rust crate; it
 does not invoke the `arity` command-line interface.
 
 Format source held in memory:
 
 ```{r}
+#| label: load-arity
+
 library(arity)
 
 format_text("x<-(1+2)*3^4\n")
