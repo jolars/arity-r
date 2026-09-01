@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/jolars/arity-r/blob/v0.1.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/jolars/arity-r/blob/main/DESCRIPTION)
 
 Larsson J (2026). *arity: Format R Code with Arity*. R package version
 0.1.0, <https://github.com/jolars/arity-r>.
