@@ -45,16 +45,14 @@ format_text <- function(
     verify
   )
 
-  .unwrap_extendr_result(
-    format_text_native(
-      text,
-      options$line_width,
-      options$indent_width,
-      options$line_ending,
-      options$roxygen_markdown,
-      options$verify
-    )
-  )
+  .unwrap_extendr_result(format_text_native(
+    text,
+    options$line_width,
+    options$indent_width,
+    options$line_ending,
+    options$roxygen_markdown,
+    options$verify
+  ))
 }
 
 #' @rdname format_text
@@ -83,16 +81,14 @@ format_file <- function(
     verify
   )
 
-  changed <- .unwrap_extendr_result(
-    format_file_native(
-      path,
-      options$line_width,
-      options$indent_width,
-      options$line_ending,
-      options$roxygen_markdown,
-      options$verify
-    )
-  )
+  changed <- .unwrap_extendr_result(format_file_native(
+    path,
+    options$line_width,
+    options$indent_width,
+    options$line_ending,
+    options$roxygen_markdown,
+    options$verify
+  ))
   invisible(changed)
 }
 
