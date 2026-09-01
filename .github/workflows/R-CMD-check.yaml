@@ -73,7 +73,7 @@ jobs:
 
   versionary:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [check, rust]
+    needs: [R-CMD-check, rust]
     runs-on: ubuntu-latest
     permissions:
       contents: write
