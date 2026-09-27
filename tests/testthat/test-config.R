@@ -20,7 +20,7 @@ test_that("file formatting discovers config from the file rather than the workin
   withr::local_dir(other)
   dir.create(file.path(project, "R"))
   path <- file.path(project, "R", "example.R")
-  writeLines(c("if (TRUE) {", "x<-1", "}"), path)
+  writeChar("if (TRUE) {\nx<-1\n}\n", path, eos = NULL, useBytes = TRUE)
 
   expect_true(format_file(path))
   expect_identical(read_source(path), "if (TRUE) {\n    x <- 1\n}\n")
@@ -84,7 +84,7 @@ test_that(
     )
 
     path <- file.path(project, "example.R")
-    writeLines(source, path, sep = "")
+    writeChar(source, path, eos = NULL, useBytes = TRUE)
     format_file(path, line_width = 80L, indent_width = 2L, line_ending = "auto")
     expect_identical(read_source(path), format_text(source, config = FALSE))
   }
@@ -101,7 +101,7 @@ test_that("an explicit config replaces discovery and environment fallback", {
     format_text(source, config = "custom.toml"),
     "if (TRUE) {\n   x <- 1\n}\n"
   )
-  writeLines(source, "example.R", sep = "")
+  writeChar(source, "example.R", eos = NULL, useBytes = TRUE)
   expect_true(format_file("example.R", config = "custom.toml"))
   expect_identical(read_source("example.R"), "if (TRUE) {\n   x <- 1\n}\n")
 })
@@ -122,7 +122,7 @@ test_that(
       format_text(source, config = FALSE, indent_width = 3),
       "if (TRUE) {\n   x <- 1\n}\n"
     )
-    writeLines(source, "example.R", sep = "")
+    writeChar(source, "example.R", eos = NULL, useBytes = TRUE)
     expect_true(format_file("example.R", config = FALSE))
     expect_identical(read_source("example.R"), "if (TRUE) {\n  x <- 1\n}\n")
   }
@@ -173,7 +173,7 @@ test_that("absent, empty, and unrelated configuration use default formatting", {
   )) {
     writeLines(config, "arity.toml")
     expect_identical(format_text("x<-1"), "x <- 1")
-    writeLines("x<-1", "example.R")
+    writeChar("x<-1\n", "example.R", eos = NULL, useBytes = TRUE)
     expect_true(format_file("example.R"))
   }
 })
@@ -181,7 +181,7 @@ test_that("absent, empty, and unrelated configuration use default formatting", {
 test_that("invalid config reports its path and leaves source unchanged", {
   project <- local_config_project()
   withr::local_dir(project)
-  writeLines("x<-1", "example.R")
+  writeChar("x<-1\n", "example.R", eos = NULL, useBytes = TRUE)
 
   for (config in list(
     "[format",
@@ -227,7 +227,7 @@ test_that("config accepts only a flag or nonempty path", {
 test_that("unreadable and non-UTF-8 configurations are errors", {
   project <- local_config_project()
   withr::local_dir(project)
-  writeLines("x<-1", "example.R")
+  writeChar("x<-1\n", "example.R", eos = NULL, useBytes = TRUE)
   path <- file.path(project, "arity.toml")
   writeBin(as.raw(c(0xff, 0xfe)), path)
   expect_error(format_file("example.R"), "arity[.]toml")
