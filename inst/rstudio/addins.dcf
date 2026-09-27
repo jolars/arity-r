@@ -1,0 +1,4 @@
+Name: Format with arity
+Description: Format selected R code, or the current document when nothing is selected.
+Binding: format_addin
+Interactive: false
