@@ -1,0 +1,72 @@
+name: Update arity-formatter
+
+on:
+  schedule:
+    - cron: "23 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-arity-formatter
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-edit
+
+      - uses: go-task/setup-task@v2
+
+      - name: Install Rust
+        working-directory: src/rust
+        run: |
+          rustup toolchain install
+          # Use the pinned toolchain when Task invokes Cargo from the repository root.
+          toolchain=$(rustup show active-toolchain | cut -d ' ' -f 1)
+          echo "RUSTUP_TOOLCHAIN=$toolchain" >> "$GITHUB_ENV"
+
+      - name: Update arity-formatter
+        id: update
+        run: |
+          cargo upgrade --manifest-path src/rust/Cargo.toml \
+            --package arity-formatter --pinned --incompatible --ignore-rust-version
+          if git diff --quiet -- src/rust/Cargo.toml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Re-vendor Rust dependencies
+        if: steps.update.outputs.changed == 'true'
+        run: task vendor-pkgs
+
+      - name: Create pull request
+        if: steps.update.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          # This token lets the update PR trigger the existing CI workflows.
+          token: ${{ secrets.RELEASE_TOKEN }}
+          branch: automation/update-arity-formatter
+          commit-message: 'chore(deps): update `arity-formatter`'
+          title: 'chore(deps): update `arity-formatter`'
+          body: |
+            Update `arity-formatter` to the latest stable release, keeping the
+            dependency pinned to an exact version.
+
+            Regenerate `Cargo.lock` and rebuild `src/rust/vendor.tar.xz` with
+            `task vendor-pkgs`, the same command used for local updates.
+          add-paths: |
+            src/rust/Cargo.toml
+            src/rust/Cargo.lock
+            src/rust/vendor.tar.xz
