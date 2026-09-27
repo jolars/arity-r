@@ -42,3 +42,21 @@ Or format one file in place:
 
 changed <- format_file("R/example.R")
 ```
+
+## RStudio addin
+
+After installing the package, choose **Format with arity** from
+RStudio’s **Addins** menu. The addin formats selected R code, or the
+whole document when nothing is selected. To assign a keyboard shortcut,
+open **Tools \> Modify Keyboard Shortcuts** and search for **Format with
+arity**.
+
+The addin works with unsaved edits and untitled R scripts. It preserves
+the initial indentation of selected code and leaves changes in the
+editor for you to save. Whole-document formatting supports R scripts and
+`.Rprofile` files. For R Markdown or Quarto documents, select complete R
+expressions in the source editor.
+
+Formatting uses the defaults of
+[`format_text()`](reference/format_text.md); it does not read
+`arity.toml`.
