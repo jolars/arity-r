@@ -8,12 +8,36 @@ output: github_document
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/jolars/arity-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jolars/arity-r/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/arity)](https://CRAN.R-project.org/package=arity)
 <!-- badges: end -->
 
 `arity` provides R bindings to the formatter behind [arity](https://arity.cc).
 The package embeds the published
-[`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it
-does not invoke the `arity` command-line interface.
+[`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it does not
+invoke the `arity` command-line interface.
+
+## Installation
+
+### CRAN version
+
+```{r}
+#| label: install_cran
+#| eval: false
+
+install.packages("arity")
+```
+
+### Development Version
+
+```{r}
+#| label: install_github
+#| eval: false
+
+devtools::install_github("jolars/arity-r")
+```
+
+## Usage
 
 Format source held in memory:
 
