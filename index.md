@@ -5,6 +5,24 @@
 [`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it does
 not invoke the `arity` command-line interface.
 
+## Installation
+
+### CRAN version
+
+``` r
+
+install.packages("arity")
+```
+
+### Development Version
+
+``` r
+
+devtools::install_github("jolars/arity-r")
+```
+
+## Usage
+
 Format source held in memory:
 
 ``` r
