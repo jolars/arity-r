@@ -1,13 +1,11 @@
 description <- read.dcf("DESCRIPTION")
 
 if (!"SystemRequirements" %in% colnames(description)) {
-  stop(
-    paste(
-      "`SystemRequirements` not found in `DESCRIPTION`.",
-      "Specify Cargo and the minimum supported rustc version.",
-      sep = "\n"
-    )
-  )
+  stop(paste(
+    "`SystemRequirements` not found in `DESCRIPTION`.",
+    "Specify Cargo and the minimum supported rustc version.",
+    sep = "\n"
+  ))
 }
 
 requirements <- description[, "SystemRequirements"]
@@ -31,25 +29,21 @@ Sys.setenv(PATH = path)
 rustc_version <- tryCatch(
   system("rustc --version", intern = TRUE),
   error = function(error) {
-    stop(
-      paste(
-        "The `rustc` command was not found on PATH.",
-        "Install Rust from https://www.rust-lang.org/tools/install.",
-        sep = "\n"
-      )
-    )
+    stop(paste(
+      "The `rustc` command was not found on PATH.",
+      "Install Rust from https://www.rust-lang.org/tools/install.",
+      sep = "\n"
+    ))
   }
 )
 cargo_version <- tryCatch(
   system("cargo --version", intern = TRUE),
   error = function(error) {
-    stop(
-      paste(
-        "The `cargo` command was not found on PATH.",
-        "Install Rust from https://www.rust-lang.org/tools/install.",
-        sep = "\n"
-      )
-    )
+    stop(paste(
+      "The `cargo` command was not found on PATH.",
+      "Install Rust from https://www.rust-lang.org/tools/install.",
+      sep = "\n"
+    ))
   }
 )
 
@@ -64,13 +58,11 @@ extract_semver <- function(value) {
 msrv <- extract_semver(rustc_requirement)
 current <- extract_semver(rustc_version)
 if (!is.na(msrv) && utils::compareVersion(msrv, current) == 1) {
-  stop(
-    sprintf(
-      "Minimum supported Rust version is %s, but %s is installed.",
-      msrv,
-      current
-    )
-  )
+  stop(sprintf(
+    "Minimum supported Rust version is %s, but %s is installed.",
+    msrv,
+    current
+  ))
 }
 
 message(sprintf("Using %s\nUsing %s", cargo_version, rustc_version))
