@@ -1,3 +1,5 @@
+withr::local_dir(local_config_project())
+
 local_editor <- function(
   contents = c("x<-1", ""),
   selection = list(list(
@@ -273,4 +275,108 @@ test_that("the addin reports unavailable RStudio and missing source editors", {
     expect_error(format_addin(), "Open a document")
     expect_length(editor$edits, 0L)
   }
+})
+
+test_that(
+  "the addin discovers config beside a named buffer even before it exists",
+  {
+    project <- local_config_project(c("[format]", "indent-width = 4"))
+    other <- local_config_project(c("[format]", "indent-width = 3"))
+    withr::local_dir(other)
+    editor <- local_editor(
+      contents = c("if (TRUE) {", "x<-1", "}"),
+      path = file.path(project, "new", "example.R")
+    )
+
+    expect_true(format_addin())
+    expect_identical(editor$edits[[1L]]$text, "if (TRUE) {\n    x <- 1\n}")
+  }
+)
+
+test_that(
+  "the addin discovers config from the working directory for untitled buffers",
+  {
+    project <- local_config_project(c("[format]", "indent-width = 3"))
+    withr::local_dir(project)
+    editor <- local_editor(contents = c("if (TRUE) {", "x<-1", "}"))
+
+    expect_true(format_addin())
+    expect_identical(editor$edits[[1L]]$text, "if (TRUE) {\n   x <- 1\n}")
+  }
+)
+
+test_that("relative buffer paths can name directories that do not exist yet", {
+  project <- local_config_project(c("[format]", "indent-width = 3"))
+  withr::local_dir(project)
+  editor <- local_editor(
+    contents = c("if (TRUE) {", "x<-1", "}"),
+    path = file.path("new", "example.R")
+  )
+
+  expect_true(format_addin())
+  expect_identical(editor$edits[[1L]]$text, "if (TRUE) {\n   x <- 1\n}")
+})
+
+test_that(
+  "selected code uses the document's config and preserves indentation",
+  {
+    project <- local_config_project(c("[format]", "indent-width = 4"))
+    other <- local_config_project()
+    withr::local_dir(other)
+    source <- "  if (TRUE) {\n  x<-1\n  }"
+    editor <- local_editor(
+      contents = strsplit(source, "\n", fixed = TRUE)[[1L]],
+      selection = list(editor_selection(source, c(1, 1, 3, 4))),
+      path = file.path(project, "report.qmd")
+    )
+
+    expect_true(format_addin())
+    expect_identical(
+      editor$edits[[1L]]$text,
+      "  if (TRUE) {\n      x <- 1\n  }"
+    )
+  }
+)
+
+test_that("configuration errors leave the editor unchanged", {
+  project <- local_config_project(c("[format]", "indent-width = 0"))
+  withr::local_dir(project)
+
+  for (selection in list(
+    list(editor_selection("", c(1, 1, 1, 1))),
+    list(editor_selection("x<-1", c(1, 1, 1, 5)))
+  )) {
+    editor <- local_editor(contents = "x<-1", selection = selection)
+    expect_error(format_addin(), "arity[.]toml")
+    expect_length(editor$edits, 0L)
+    expect_length(editor$cursors, 0L)
+  }
+})
+
+test_that("selected code honors configured CRLF endings without changing literal contents", {
+  project <- local_config_project(c("[format]", 'line-ending = "crlf"'))
+  withr::local_dir(project)
+  text <- "  x<-\"first\r\nsecond\"\r\n  y<-2\r\n"
+  editor <- local_editor(
+    contents = c("  x<-\"first", "second\"", "  y<-2", ""),
+    selection = list(editor_selection(text, c(1, 1, 4, 1)))
+  )
+
+  expect_true(format_addin())
+  expect_identical(
+    editor$edits[[1L]]$text,
+    "  x <- \"first\r\nsecond\"\r\n  y <- 2\r\n"
+  )
+})
+
+test_that("CRLF configuration does not indent empty selection lines", {
+  project <- local_config_project(c("[format]", 'line-ending = "crlf"'))
+  withr::local_dir(project)
+  editor <- local_editor(
+    contents = c("  ", "x<-1"),
+    selection = list(editor_selection("  \n", c(1, 1, 2, 1)))
+  )
+
+  expect_true(format_addin())
+  expect_identical(editor$edits[[1L]]$text, "\r\n")
 })

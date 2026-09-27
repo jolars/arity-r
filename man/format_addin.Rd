@@ -11,8 +11,9 @@ Invisibly returns \code{TRUE} when the buffer changed and \code{FALSE} otherwise
 }
 \description{
 Formats selected R code in the source editor, or the whole document when
-nothing is selected. The addin uses the defaults of \code{\link[=format_text]{format_text()}},
-including syntax verification. It does not discover an \code{arity.toml} file.
+nothing is selected. The addin discovers \code{arity.toml} from the document's
+directory, or the working directory for untitled buffers, following the
+configuration rules of \code{\link[=format_text]{format_text()}}. Syntax verification is enabled.
 }
 \details{
 Install arity to make \strong{Format with arity} available in RStudio's Addins

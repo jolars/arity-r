@@ -47,6 +47,39 @@ Or format one file in place:
 changed <- format_file("R/example.R")
 ```
 
+## Configuration
+
+Arity automatically reads the nearest `arity.toml`, searching upward
+from the file’s directory for `format_file()` or the working directory
+for `format_text()`. The search includes the repository root and stops
+there if it contains a `.git` file or directory. Otherwise, it continues
+to the filesystem root. For example:
+
+``` toml
+[format]
+line-width = 100
+indent-width = 2
+line-ending = "auto"
+```
+
+If no project configuration is found, `ARITY_CONFIG` can name a fallback
+file. Configuration files are not merged, and missing settings use the
+built-in defaults: a line width of 80, an indentation width of 2, and
+automatic line endings. Explicit formatting arguments override the
+selected configuration.
+
+``` r
+format_file("R/example.R", line_width = 100)
+format_file("R/example.R", config = FALSE)
+format_file("R/example.R", config = "other.toml")
+```
+
+`config = FALSE` ignores project and fallback configuration. An explicit
+path skips discovery and the fallback. Relative configuration paths use
+the working directory. Invalid formatting configuration produces an
+error before changing the source. Settings for other CLI operations,
+such as file exclusions and linting, have no effect in the R package.
+
 ## RStudio addin
 
 After installing the package, choose **Format with arity** from
@@ -61,5 +94,6 @@ editor for you to save. Whole-document formatting supports R scripts and
 `.Rprofile` files. For R Markdown or Quarto documents, select complete R
 expressions in the source editor.
 
-Formatting uses the defaults of `format_text()`; it does not read
-`arity.toml`.
+The addin discovers configuration from the document’s directory, or the
+working directory for untitled buffers, using the same rules as the
+formatting functions. Syntax verification is enabled.

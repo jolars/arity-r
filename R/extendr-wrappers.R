@@ -5,6 +5,12 @@
 #' @useDynLib arity, .registration = TRUE
 NULL
 
+#' Resolve formatter settings from an explicit or discovered configuration.
+#' @keywords internal
+format_config_native <- function(directory, config, no_config, fallback) {
+  .Call(wrap__format_config_native, directory, config, no_config, fallback)
+}
+
 #' Format one R source string.
 #' @keywords internal
 format_text_native <- function(

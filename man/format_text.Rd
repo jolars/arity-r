@@ -7,40 +7,48 @@
 \usage{
 format_text(
   text,
-  line_width = 80L,
-  indent_width = 2L,
-  line_ending = c("auto", "lf", "crlf", "native"),
+  line_width = NULL,
+  indent_width = NULL,
+  line_ending = NULL,
   roxygen_markdown = FALSE,
-  verify = TRUE
+  verify = TRUE,
+  config = TRUE
 )
 
 format_file(
   path,
-  line_width = 80L,
-  indent_width = 2L,
-  line_ending = c("auto", "lf", "crlf", "native"),
+  line_width = NULL,
+  indent_width = NULL,
+  line_ending = NULL,
   roxygen_markdown = FALSE,
-  verify = TRUE
+  verify = TRUE,
+  config = TRUE
 )
 }
 \arguments{
 \item{text}{A non-missing character scalar containing valid UTF-8 R source
 code. Strings with a declared encoding are converted to UTF-8.}
 
-\item{line_width}{Maximum output line width, from 1 through 1000.}
+\item{line_width}{Maximum output line width, from 1 through 1000. \code{NULL} uses
+the configuration value, or 80 when unset.}
 
 \item{indent_width}{Number of spaces per indentation level, from 1 through
-1000.}
+1000. \code{NULL} uses the configuration value, or 2 when unset.}
 
 \item{line_ending}{Output line-ending policy. \code{"auto"} preserves the style of
 the first source line ending, \code{"lf"} and \code{"crlf"} force a style, and
-\code{"native"} uses the current platform's convention.}
+\code{"native"} uses the current platform's convention. \code{NULL} uses the
+configuration value, or \code{"auto"} when unset.}
 
 \item{roxygen_markdown}{Whether roxygen blocks without an explicit \verb{@md} or
 \verb{@noMd} directive should be parsed in markdown mode.}
 
 \item{verify}{Whether to verify syntax preservation, ordinary comment
 preservation, and idempotence after formatting.}
+
+\item{config}{\code{TRUE} discovers configuration automatically, \code{FALSE} ignores
+all configuration files, or a nonempty character scalar names an explicit
+configuration file. A missing or unreadable selected file is an error.}
 
 \item{path}{A non-missing character scalar naming a UTF-8 file. The contents
 are treated as R source regardless of the file extension.}
@@ -53,8 +61,22 @@ are treated as R source regardless of the file extension.}
 \code{format_text()} formats one R source string and returns the result.
 \code{format_file()} formats one UTF-8 file in place and reports invisibly whether
 its contents changed. Both functions use the formatter embedded in the
-\code{arity-formatter} Rust crate; they do not invoke the arity CLI or discover an
-\code{arity.toml} file.
+\code{arity-formatter} Rust crate.
+}
+\details{
+By default, formatting uses the nearest \code{arity.toml}, searching upward from
+the file's directory for \code{format_file()} or the working directory for
+\code{format_text()}. The search includes the repository root, then stops at a
+\code{.git} file or directory, or at the filesystem root. If no project config is
+found, a nonempty \code{ARITY_CONFIG} environment variable supplies a fallback
+config path. Relative explicit and fallback paths use the working directory.
+Configuration files are not merged. Missing settings use built-in defaults,
+and explicit formatting arguments override the selected configuration.
+
+The package reads \code{line-width}, \code{indent-width}, and \code{line-ending} from the
+\verb{[format]} table. Settings for other CLI operations, including exclusions,
+have no effect. Invalid formatting configuration raises an error before any
+source is changed.
 }
 \examples{
 format_text("x<-(1+2)*3^4\n")

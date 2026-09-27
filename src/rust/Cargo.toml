@@ -17,6 +17,8 @@ bench = false
 [dependencies]
 arity-formatter = "=0.7.0"
 extendr-api = { version = "0.9", features = ["result_condition"] }
+serde = { version = "1", features = ["derive"] }
+toml = { version = "0.9", default-features = false, features = ["std", "parse", "serde"] }
 
 [profile.release]
 lto = true

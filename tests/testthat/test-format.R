@@ -1,3 +1,5 @@
+withr::local_dir(local_config_project())
+
 test_that("format_text formats R source with the default style", {
   expect_identical(format_text("x<-(1+2)*3^4\n"), "x <- (1 + 2) * 3^4\n")
 })

@@ -1,8 +1,9 @@
 #' Format R code in RStudio
 #'
 #' Formats selected R code in the source editor, or the whole document when
-#' nothing is selected. The addin uses the defaults of [format_text()],
-#' including syntax verification. It does not discover an `arity.toml` file.
+#' nothing is selected. The addin discovers `arity.toml` from the document's
+#' directory, or the working directory for untitled buffers, following the
+#' configuration rules of [format_text()]. Syntax verification is enabled.
 #'
 #' Install arity to make **Format with arity** available in RStudio's Addins
 #' menu. You can assign a keyboard shortcut through **Tools > Modify Keyboard
@@ -32,13 +33,27 @@ format_addin <- function() {
   }
 
   selections <- Filter(function(x) nzchar(x$text), context$selection)
+  if (
+    !length(selections) &&
+      nzchar(context$path) &&
+      !grepl("\\.[rR]$|(^|[/\\\\])\\.Rprofile$", context$path)
+  ) {
+    stop(
+      "Whole-document formatting supports R scripts and .Rprofile files. ",
+      "Select R code to format other document types.",
+      call. = FALSE
+    )
+  }
+  directory <- if (nzchar(context$path)) dirname(context$path) else getwd()
+  style <- .resolve_format_config(TRUE, directory)
   if (length(selections)) {
     # Format every selection before editing, so an error cannot apply a partial edit.
     formatted <- vapply(
       selections,
       .format_selection,
       character(1),
-      contents = context$contents
+      contents = context$contents,
+      style = style
     )
     original <- vapply(selections, function(x) x$text, character(1))
     changed <- formatted != original
@@ -52,19 +67,11 @@ format_addin <- function() {
     return(invisible(any(changed)))
   }
 
-  if (
-    nzchar(context$path) &&
-      !grepl("\\.[rR]$|(^|[/\\\\])\\.Rprofile$", context$path)
-  ) {
-    stop(
-      "Whole-document formatting supports R scripts and .Rprofile files. ",
-      "Select R code to format other document types.",
-      call. = FALSE
-    )
-  }
-
   original <- paste(context$contents, collapse = "\n")
-  formatted <- format_text(original)
+  formatted <- do.call(
+    format_text,
+    c(list(text = original, config = FALSE), style)
+  )
   changed <- !identical(formatted, original)
   if (changed) {
     rstudioapi::modifyRange(
@@ -82,9 +89,9 @@ format_addin <- function() {
   invisible(changed)
 }
 
-.format_selection <- function(selection, contents) {
+.format_selection <- function(selection, contents, style) {
   text <- selection$text
-  formatted <- format_text(text)
+  formatted <- do.call(format_text, c(list(text = text, config = FALSE), style))
   start <- selection$range$start
   prefix <- substr(contents[[start[[1L]]]], 1L, start[[2L]] - 1L)
   if (grepl("[^ \t]", prefix)) {
@@ -100,12 +107,14 @@ format_addin <- function() {
   lines <- strsplit(paste0(formatted, "\n"), "\n", fixed = TRUE)[[1L]]
   indents <- rep(indent, length(lines))
   indents[[1L]] <- leading
-  indents[!nzchar(lines)] <- ""
+  indents[!nzchar(lines) | lines == "\r"] <- ""
 
   # Indenting inside a multiline string or quoted name would change its value.
   previous <- options(keep.parse.data = TRUE)
   on.exit(options(previous), add = TRUE)
-  tokens <- utils::getParseData(parse(text = formatted, keep.source = TRUE))
+  # R's parser needs LF endings in character input; only token line spans matter here.
+  parse_text <- gsub("\r\n", "\n", formatted, fixed = TRUE)
+  tokens <- utils::getParseData(parse(text = parse_text, keep.source = TRUE))
   multiline <- tokens[tokens$terminal & tokens$line1 < tokens$line2, ]
   for (i in seq_len(nrow(multiline))) {
     indents[seq.int(multiline$line1[[i]] + 1L, multiline$line2[[i]])] <- ""
