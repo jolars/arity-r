@@ -1,9 +1,10 @@
 # Format R code in RStudio
 
 Formats selected R code in the source editor, or the whole document when
-nothing is selected. The addin uses the defaults of
-[`format_text()`](format_text.md), including syntax verification. It
-does not discover an `arity.toml` file.
+nothing is selected. The addin discovers `arity.toml` from the
+document's directory, or the working directory for untitled buffers,
+following the configuration rules of [`format_text()`](format_text.md).
+Syntax verification is enabled.
 
 ## Usage
 
