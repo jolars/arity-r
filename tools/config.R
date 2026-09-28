@@ -11,7 +11,7 @@ if (is_debug) {
 }
 
 .cran_flags <- if (!is_not_cran && vendor_exists) {
-  "-j 2 --offline --frozen"
+  "--offline --frozen"
 } else {
   ""
 }
