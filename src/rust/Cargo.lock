@@ -4,9 +4,9 @@ version = 4
 
 [[package]]
 name = "arity-formatter"
-version = "0.7.0"
+version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41fdb6024027f2bbe158e6b99ec9414944b46672b6a27e3b1881748ddde68abe"
+checksum = "812e81f93f2534beac39356f315e4f7f50b5cdc60368254dffdb12082125786c"
 dependencies = [
  "arity-parser",
  "rowan",
@@ -14,9 +14,9 @@ dependencies = [
 
 [[package]]
 name = "arity-parser"
-version = "0.5.3"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53417246066df2be8c2a46e23aedfc2d094c014c8a28463e2b84a8be5b4ed453"
+checksum = "f198aa1c369836b9affa5d0b9b0da5070acc20023d75307b2fd7626583dfb4a9"
 dependencies = [
  "rowan",
  "serde",
@@ -179,7 +179,7 @@ checksum = "67a77cd6f1a55ff3cb1969c2618f73107efaa6de1daf796ad60ce8f737ae97c1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.4",
+ "syn 3.0.6",
 ]
 
 [[package]]
@@ -228,7 +228,7 @@ checksum = "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.4",
+ "syn 3.0.6",
 ]
 
 [[package]]
@@ -263,9 +263,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "3.0.4"
+version = "3.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6275cddf4610d1775e6d1fe9469b2e77d0f39fd98fb7450901b821e0c53649f"
+checksum = "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -319,9 +319,9 @@ checksum = "7d56353a2a665ad0f41a421187180aab746c8c325620617ad883a99a1cbe66d2"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.24"
+version = "1.0.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+checksum = "d245f478577f809a851594d02313b640fb437e0bb33866753cff937863096954"
 
 [[package]]
 name = "winnow"
