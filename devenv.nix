@@ -28,6 +28,7 @@
             urlchecker
             pkgdown
             spelling
+            rhub
           ];
         }
       );
