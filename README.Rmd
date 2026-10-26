@@ -12,6 +12,19 @@ output: github_document
 status](https://www.r-pkg.org/badges/version/arity)](https://CRAN.R-project.org/package=arity)
 <!-- badges: end -->
 
+```{r}
+#| include: false
+#| label: setup
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  fig.align = "center",
+  fig.width = 5
+)
+```
+
 `arity` provides R bindings to the formatter behind [arity](https://arity.cc).
 The package embeds the published
 [`arity-formatter`](https://docs.rs/arity-formatter) Rust crate; it does not
@@ -95,9 +108,9 @@ nothing is selected. To assign a keyboard shortcut, open **Tools > Modify
 Keyboard Shortcuts** and search for **Format with arity**.
 
 The addin works with unsaved edits and untitled R scripts. It preserves the
-initial indentation of selected code and leaves changes in the editor for you
-to save. Whole-document formatting supports R scripts and `.Rprofile` files.
-For R Markdown or Quarto documents, select complete R expressions in the source
+initial indentation of selected code and leaves changes in the editor for you to
+save. Whole-document formatting supports R scripts and `.Rprofile` files. For R
+Markdown or Quarto documents, select complete R expressions in the source
 editor.
 
 The addin discovers configuration from the document's directory, or the working

@@ -37,9 +37,8 @@ Format source held in memory:
 library(arity)
 
 format_text("x<-(1+2)*3^4\n")
+#> [1] "x <- (1 + 2) * 3^4\n"
 ```
-
-    ## [1] "x <- (1 + 2) * 3^4\n"
 
 Or format one file in place:
 
