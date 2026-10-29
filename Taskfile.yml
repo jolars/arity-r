@@ -5,22 +5,9 @@ tasks:
     deps: [install]
 
   document:
-    desc: Regenerate roxygen docs and NAMESPACE
+    desc: Regenerate R wrappers, help pages, and NAMESPACE
     cmds:
-      - Rscript -e 'devtools::document(roclets = c("rd", "collate", "namespace"))'
-
-  extendr-document:
-    desc: Regenerate extendr R wrappers and Rust module registration
-    cmds:
-      - task: extendr-wrappers
       - Rscript -e 'devtools::document()'
-
-  extendr-wrappers:
-    desc: Regenerate extendr R wrappers
-    internal: true
-    dir: src
-    cmds:
-      - cargo run --locked --bin document --manifest-path=rust/Cargo.toml --target-dir=rust/target
 
   vendor-pkgs:
     desc: Re-vendor Rust dependencies for offline package builds

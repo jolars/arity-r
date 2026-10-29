@@ -7,50 +7,14 @@ NULL
 
 #' Resolve formatter settings from an explicit or discovered configuration.
 #' @keywords internal
-format_config_native <- function(directory, config, no_config, fallback) {
-  .Call(wrap__format_config_native, directory, config, no_config, fallback)
-}
+format_config_native <- function(directory, config, no_config, fallback) .Call(wrap__format_config_native, directory, config, no_config, fallback)
 
 #' Format one R source string.
 #' @keywords internal
-format_text_native <- function(
-  source,
-  line_width,
-  indent_width,
-  line_ending,
-  roxygen_markdown,
-  verify
-) {
-  .Call(
-    wrap__format_text_native,
-    source,
-    line_width,
-    indent_width,
-    line_ending,
-    roxygen_markdown,
-    verify
-  )
-}
+format_text_native <- function(source, line_width, indent_width, line_ending, roxygen_markdown, verify) .Call(wrap__format_text_native, source, line_width, indent_width, line_ending, roxygen_markdown, verify)
 
 #' Format one UTF-8 file in place and report whether it changed.
 #' @keywords internal
-format_file_native <- function(
-  path,
-  line_width,
-  indent_width,
-  line_ending,
-  roxygen_markdown,
-  verify
-) {
-  .Call(
-    wrap__format_file_native,
-    path,
-    line_width,
-    indent_width,
-    line_ending,
-    roxygen_markdown,
-    verify
-  )
-}
+format_file_native <- function(path, line_width, indent_width, line_ending, roxygen_markdown, verify) .Call(wrap__format_file_native, path, line_width, indent_width, line_ending, roxygen_markdown, verify)
 
 # nolint end
