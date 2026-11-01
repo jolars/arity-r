@@ -44,6 +44,7 @@ fn format_source(
         line_width: parse_width(line_width, "line_width")?,
         indent_width: parse_width(indent_width, "indent_width")?,
         line_ending: parse_line_ending(line_ending)?,
+        ..FormatStyle::default()
     };
     let options = ParseOptions::default().with_roxygen_markdown_default(roxygen_markdown);
 
