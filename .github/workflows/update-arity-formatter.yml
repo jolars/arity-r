@@ -66,6 +66,8 @@ jobs:
 
             Regenerate `Cargo.lock` and rebuild `src/rust/vendor.tar.xz` with
             `task vendor-pkgs`, the same command used for local updates.
+
+            @jolars, a new `arity-formatter` update is ready for review.
           add-paths: |
             src/rust/Cargo.toml
             src/rust/Cargo.lock
